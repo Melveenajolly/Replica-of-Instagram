@@ -22,7 +22,8 @@ class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):
 		myuser = myuser_key.get()
 		new_post.owner_user = myuser_key
 		new_key = new_post.put()
-		myuser.posts.append(new_key)
+		myuser.posts.insert(0,new_key)
+		myuser.put()
 
 		self.redirect('/')
 

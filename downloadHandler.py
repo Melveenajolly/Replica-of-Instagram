@@ -7,8 +7,7 @@ from user import User
 from post import Post
 
 class DownloadHandler(blobstore_handlers.BlobstoreDownloadHandler):
-    def get(self, image_key):
-        if not blobstore.get(image_key):
-            self.error(404)
-        else:
-            self.send_blob(image_key)
+    def get(self):
+    	post = ndb.Key(urlsafe=self.request.get('key')).get()
+      
+        self.send_blob( post.image_blob)

@@ -7,6 +7,8 @@ from google.appengine.ext import blobstore
 from user import User
 from uploadHandler import UploadHandler
 from downloadHandler import DownloadHandler
+from profile import Profile
+from search import Search
 
 JINJA_ENVIRONMENT = jinja2.Environment(
 	loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
@@ -36,6 +38,7 @@ class MainPage(webapp2.RequestHandler):
 			if  myuser == None:
 				
 				myuser = User(id = user.user_id(), email_address = user.email())
+				myuser.username = user.email()
 				myuser.put()
 			
 
@@ -67,6 +70,8 @@ app = webapp2.WSGIApplication([
 	('/', MainPage,),
 	('/upload', UploadHandler),
 	('/download', DownloadHandler),
+	('/profile', Profile),
+	('/search', Search)
 	
 	
 ], debug=True)

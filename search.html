@@ -12,7 +12,7 @@
 	    <div class="navbar">
 	        <a class="active" href="/">Home</a>
 	        
-	        <a href="/profile?user_key={{myuser.key.urlsafe()}}">My Profile</a>
+	        <a href="/profile?user_key={{logedin_user.key.urlsafe()}}">My Profile</a>
 
 	        <div class="search-container">
 			    <form action="/search" method="get">
@@ -22,7 +22,7 @@
 			  </div>
 	        
 	        <div class="topnav-right">
-	            <p class='user_email'>{{ myuser.email_address }}</p>
+	            <p class='user_email'>{{ logedin_user.email_address }}</p>
 	            <a class='logout' href='{{ url }}'>{{ url_string }}</a>
 	    </div>
 	    </div>
@@ -32,13 +32,17 @@
 		    
 
 	    	<div class="content_body">
-			<h4>New Post</h4>
-			<form action="{{ upload_url }}" method="post" accept="image/jpeg, image/png" enctype="multipart/form-data">
-				Upload an image: <input type="file" name="file" required="" /><br/>
-				Caption:<input type="text" value="" name = "caption" />
-				<br/>
-				<input type="submit" value="Post" />
-			</form>
+			<h4>Search Result:</h4>
+			{% if search_output %}
+			{% for i in search_output %}
+			  
+			  <a href="/profile?user_key={{i.key.urlsafe()}}">{{i.email_address}}</a>
+			  <br/>
+			 {% endfor %}
+			 {% else %}
+			 <p>No match found</p>
+			 {% endif %}
+
 			</div>
 
 		
@@ -64,8 +68,3 @@
 	</body>
 
 </html>
-
-		
-
-
-		
