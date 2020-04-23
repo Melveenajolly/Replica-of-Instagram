@@ -3,7 +3,10 @@ import jinja2
 from google.appengine.api import users
 from google.appengine.ext import ndb
 import os
+from google.appengine.ext import blobstore
 from user import User
+from uploadHandler import UploadHandler
+from downloadHandler import DownloadHandler
 
 JINJA_ENVIRONMENT = jinja2.Environment(
 	loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
@@ -19,16 +22,13 @@ class MainPage(webapp2.RequestHandler):
 		url = ''
 		url_string = ''
 		
-		search_url = ''
-		search_url_string = ''
-		
 		
 		user = users.get_current_user()
 		myuser = None
 		
 		if user:
 			url = users.create_logout_url(self.request.uri)
-			url_string = 'logout'
+			url_string = 'Log Out'
 			myuser =''
 			myuser_key = ndb.Key('User',  user.user_id() )
 			myuser = myuser_key.get()
@@ -37,13 +37,14 @@ class MainPage(webapp2.RequestHandler):
 				
 				myuser = User(id = user.user_id(), email_address = user.email())
 				myuser.put()
-				
+			
+
 			
 
 		else:
 
 			url = users.create_login_url(self.request.uri)
-			url_string = 'login'
+			url_string = 'Log In'
 
 
 
@@ -52,7 +53,8 @@ class MainPage(webapp2.RequestHandler):
 		    'url'  : url,
 		    'url_string' : url_string,
 		    'user': user,
-		    'myuser' : myuser
+		    'myuser' : myuser,
+		    'upload_url':  blobstore.create_upload_url('/upload')
 		   
 		    
 		}
@@ -62,9 +64,10 @@ class MainPage(webapp2.RequestHandler):
 
 # starts the web application we specify the full routing table here as well
 app = webapp2.WSGIApplication([
-	('/', MainPage,
-
-	)
+	('/', MainPage,),
+	('/upload', UploadHandler),
+	('/download', DownloadHandler),
+	
 	
 ], debug=True)
 	

@@ -6,5 +6,9 @@ libraries:
 - name: jinja2
   version: latest
 handlers:
+- url: /style
+  static_dir: style
+
 - url: /.*
   script: main.app
+
