@@ -76,7 +76,20 @@ class Profile(webapp2.RequestHandler):
 			current_user.put()
 			logedin_user.put()
 			self.redirect('/profile?user_key=' + str(user_key.urlsafe()))
-			
+
+		elif self.request.get('button') == 'Submit':
+			if len(self.request.get('comment').strip()) > 0:
+				comment_text = self.request.get('comment')
+				post_id = ndb.Key('Post',  int(self.request.get('postid')))
+				commented_post = post_id.get()
+
+				comment = Comment()
+				comment.comment_text = comment_text
+				comment.owner_user = myuser_key
+				comment_key = comment.put()
+				commented_post.comments.insert(0,comment_key)
+				commented_post.put()
+			self.redirect('/profile?user_key=' + str(user_key.urlsafe()))
 
 
 

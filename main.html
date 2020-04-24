@@ -49,6 +49,17 @@
 				<img alt="image" id="img" src="/download?key={{i.key.urlsafe()}} "/>
 				<br/>
 				<p>{{i.text_caption}}</p>
+				{% for j in i.comments[:5] %}
+				<p>{{j.get().owner_user.get().username}}: <i>{{j.get().comment_text}}</i></p>
+
+
+
+				{% endfor %}
+				<form action="/" method="post">
+					<input type="hidden" name="postid" value="{{i.key.id()}}">
+			      <input type="text" placeholder="Comment..." name="comment" maxlength="200" required>
+			      <button type="submit" name="button" value="Submit">Submit</button>
+			    </form>
 			
 		    	</div>
 			</figure>

@@ -11,6 +11,7 @@ from profile import Profile
 from search import Search
 from post import Post
 from display import Display
+from comment import Comment
 
 JINJA_ENVIRONMENT = jinja2.Environment(
 	loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
@@ -36,7 +37,7 @@ class MainPage(webapp2.RequestHandler):
 			url = users.create_logout_url(self.request.uri)
 			url_string = 'Log Out'
 			myuser =''
-			myuser_key = ndb.Key('User',  user.user_id() )
+			myuser_key = ndb.Key('User',  user.user_id())
 			myuser = myuser_key.get()
 			
 			if  myuser == None:
@@ -81,6 +82,27 @@ class MainPage(webapp2.RequestHandler):
 
 		template = JINJA_ENVIRONMENT.get_template('main.html')
 		self.response.write(template.render(template_values))
+
+	def post(self):
+		self.response.headers['Content-Type'] = 'text/html'
+		user = users.get_current_user()
+		myuser_key = ndb.Key('User',  user.user_id())
+
+		if self.request.get('button') == 'Submit':
+			if len(self.request.get('comment').strip()) > 0:
+				comment_text = self.request.get('comment')
+				post_id = ndb.Key('Post',  int(self.request.get('postid')))
+				commented_post = post_id.get()
+
+				comment = Comment()
+				comment.comment_text = comment_text
+				comment.owner_user = myuser_key
+				comment_key = comment.put()
+				commented_post.comments.insert(0,comment_key)
+				commented_post.put()
+			self.redirect('/')
+
+		
 
 # starts the web application we specify the full routing table here as well
 app = webapp2.WSGIApplication([
