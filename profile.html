@@ -34,8 +34,9 @@
 
 	    	<div class="content_body">
 			<h2>{{current_user.email_address}}</h2>
-			<h4>{{followers_count}} followers</h4>
-			<h4>{{following_count}} following</h4>
+			
+			<a href="/display?user_key={{user_key}}&temp=followers"><h4>{{followers_count}} </a>followers</h4>
+			<a href="/display?user_key={{user_key}}&temp=following"><h4>{{following_count}} </a>following</h4>
 			{% if logedin_use_key != user_key %}
 			<form method="post" action="/profile?user_key ={{user_key}}" id = "form1">
 				<input type="hidden" value="{{logedin_use_key}}" name="logedin_use_key"/>

@@ -10,6 +10,7 @@ from downloadHandler import DownloadHandler
 from profile import Profile
 from search import Search
 from post import Post
+from display import Display
 
 JINJA_ENVIRONMENT = jinja2.Environment(
 	loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
@@ -87,7 +88,8 @@ app = webapp2.WSGIApplication([
 	('/upload', UploadHandler),
 	('/download', DownloadHandler),
 	('/profile', Profile),
-	('/search', Search)
+	('/search', Search),
+	('/display', Display)
 	
 	
 ], debug=True)
