@@ -12,6 +12,7 @@ from search import Search
 from post import Post
 from display import Display
 from comment import Comment
+from view import View
 
 JINJA_ENVIRONMENT = jinja2.Environment(
 	loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
@@ -111,7 +112,8 @@ app = webapp2.WSGIApplication([
 	('/download', DownloadHandler),
 	('/profile', Profile),
 	('/search', Search),
-	('/display', Display)
+	('/display', Display),
+	('/view', View)
 	
 	
 ], debug=True)

@@ -66,6 +66,10 @@
 			{% for j in i.comments[:5] %}
 				<p>{{j.get().owner_user.get().username}}: <i>{{j.get().comment_text}}</i></p>
 				{% endfor %}
+			{% if i.comments[5:] %}
+
+				<a href="/view?post_key={{i.key.urlsafe()}}">More..</a>
+				{% endif %}
 			<form action="/profile?user_key ={{user_key}}" method="post">
 					<input type="hidden" name="postid" value="{{i.key.id()}}">
 					<input type="hidden" value="{{logedin_use_key}}" name="logedin_use_key"/>
