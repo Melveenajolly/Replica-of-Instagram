@@ -9,6 +9,7 @@ from uploadHandler import UploadHandler
 from downloadHandler import DownloadHandler
 from profile import Profile
 from search import Search
+from post import Post
 
 JINJA_ENVIRONMENT = jinja2.Environment(
 	loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
@@ -27,6 +28,8 @@ class MainPage(webapp2.RequestHandler):
 		
 		user = users.get_current_user()
 		myuser = None
+		timeline_posts = []
+		following_users = []
 		
 		if user:
 			url = users.create_logout_url(self.request.uri)
@@ -40,6 +43,18 @@ class MainPage(webapp2.RequestHandler):
 				myuser = User(id = user.user_id(), email_address = user.email())
 				myuser.username = user.email()
 				myuser.put()
+
+			else:
+				for i in myuser.following:
+					following_users.append(i)
+				following_users.append(myuser.key)
+				timeline_posts = Post.query(Post.owner_user.IN(following_users)).order(-Post.date).fetch()
+		
+
+
+
+		
+
 			
 
 			
@@ -57,7 +72,8 @@ class MainPage(webapp2.RequestHandler):
 		    'url_string' : url_string,
 		    'user': user,
 		    'myuser' : myuser,
-		    'upload_url':  blobstore.create_upload_url('/upload')
+		    'upload_url':  blobstore.create_upload_url('/upload'),
+		    'timeline_posts': timeline_posts
 		   
 		    
 		}

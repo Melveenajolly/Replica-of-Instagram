@@ -33,12 +33,27 @@
 
 	    	<div class="content_body">
 			<h4>New Post</h4>
-			<form action="{{ upload_url }}" method="post" accept="image/jpeg, image/png" enctype="multipart/form-data">
-				Upload an image: <input type="file" name="file" required="" /><br/>
+			<form action="{{ upload_url }}" method="post" enctype="multipart/form-data">
+				Upload an image: <input type="file" name="file" required="" accept="image/jpeg, image/png"  /><br/>
 				Caption:<input type="text" value="" name = "caption" />
 				<br/>
 				<input type="submit" value="Post" />
 			</form>
+			</div>
+
+			<div class="content_body">
+			{% for i in timeline_posts[:50] %}
+			<figure>
+				<div class="post_box">
+				<h5>{{i.owner_user.get().username}}</h5>
+				<img alt="image" id="img" src="/download?key={{i.key.urlsafe()}} "/>
+				<br/>
+				<p>{{i.text_caption}}</p>
+			
+		    	</div>
+			</figure>
+			{% endfor %}
+			
 			</div>
 
 		

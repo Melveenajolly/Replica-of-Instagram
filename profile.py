@@ -16,7 +16,7 @@ JINJA_ENVIRONMENT = jinja2.Environment(
 
 
 class Profile(webapp2.RequestHandler):
-    def get(self):
+	def get(self):
 		self.response.headers['Content-Type'] = 'text/html'
 		user = users.get_current_user()
 		template_values = {}
@@ -32,6 +32,7 @@ class Profile(webapp2.RequestHandler):
 			followers_count = len(current_user.followers)
 			following_count = len(current_user.following)
 			current_user_post = ndb.get_multi (current_user.posts)
+			following_list = ndb.get_multi (logedin_user.following)
 
 
 			template_values={
@@ -44,12 +45,38 @@ class Profile(webapp2.RequestHandler):
 	    		'following_count':following_count,
 	    		'current_user_post': current_user_post,
 	    		'logedin_use_key':logedin_use_key.urlsafe(),
-	    		'logedin_user':logedin_user
+	    		'logedin_user':logedin_user,
+	    		'following_list':following_list
 
 	    	}
 			template = JINJA_ENVIRONMENT.get_template ('profile.html')
 			self.response.write (template.render (template_values))
-	    
-
 		else:
 			self.redirect('/')
+
+	def post(self):
+
+		self.response.headers['Content-Type'] = 'text/html'
+		user_key = ndb.Key (urlsafe=self.request.get('user_key'))
+		current_user = user_key.get()
+
+		logedin_use_key = ndb.Key(urlsafe=self.request.get('logedin_use_key') )
+		logedin_user = logedin_use_key.get()
+
+		if self.request.get('button') == 'Follow':
+			logedin_user.following.append(user_key)
+			current_user.followers.append(logedin_use_key)
+			current_user.put()
+			logedin_user.put()
+			self.redirect('/profile?user_key=' + str(user_key.urlsafe()))
+
+		elif self.request.get('button') == 'Unfollow':
+			logedin_user.following.remove(user_key)
+			current_user.followers.remove(logedin_use_key)
+			current_user.put()
+			logedin_user.put()
+			self.redirect('/profile?user_key=' + str(user_key.urlsafe()))
+			
+
+
+
