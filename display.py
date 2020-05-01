@@ -35,6 +35,7 @@ class Display(webapp2.RequestHandler):
 			if self.request.get('temp') == 'followers':
 				temp_list = ndb.get_multi (current_user.followers)
 				follow_string = 'Followers'
+				
 			elif self.request.get('temp') == 'following':
 				temp_list = ndb.get_multi (current_user.following)
 				follow_string = 'Following'

@@ -34,21 +34,29 @@
 	    	<div class="content_body">
 			<h4>New Post</h4>
 			<form action="{{ upload_url }}" method="post" enctype="multipart/form-data">
-				Upload an image: <input type="file" name="file" required="" accept="image/jpeg, image/png"  /><br/>
-				Caption:<input type="text" value="" name = "caption" />
+				Upload an image: <input type="file" name="file" required="" accept="image/jpeg, image/png"  /><br/>			  <br/>
+
+				Caption:<input type="text" value="" name = "caption" />			  <br/>
+
 				<br/>
 				<input type="submit" value="Post" />
 			</form>
 			</div>
 
 			<div class="content_body">
+			{%if timeline_posts:%}
 			{% for i in timeline_posts[:50] %}
 			<figure>
 				<div class="post_box">
 				<h5>{{i.owner_user.get().username}}</h5>
-				<img alt="image" id="img" src="/download?key={{i.key.urlsafe()}} "/>
+							  <br/>
+
+				<img alt="image" id="img" src="/download?key={{i.key.urlsafe()}} "/>			  <br/>
+
 				<br/>
+				{% if i.text_caption %}
 				<p>{{i.text_caption}}</p>
+				{% endif %}
 				{% for j in i.comments[:5] %}
 				<p>{{j.get().owner_user.get().username}}: <i>{{j.get().comment_text}}</i></p>
 
@@ -59,6 +67,7 @@
 
 				<a href="/view?post_key={{i.key.urlsafe()}}">More..</a>
 				{% endif %}
+				<br/>
 				<form action="/" method="post">
 					<input type="hidden" name="postid" value="{{i.key.id()}}">
 			      <input type="text" placeholder="Comment..." name="comment" maxlength="200" required>
@@ -67,7 +76,11 @@
 			
 		    	</div>
 			</figure>
+			<hr noshade="noshade">
 			{% endfor %}
+			{%else%}
+			<h3>No Posts</h3>
+			{%endif%}
 			
 			</div>
 

@@ -6,6 +6,7 @@ import os
 
 from user import User
 from post import Post
+from comment import Comment
 
 
 JINJA_ENVIRONMENT = jinja2.Environment(
@@ -85,7 +86,7 @@ class Profile(webapp2.RequestHandler):
 
 				comment = Comment()
 				comment.comment_text = comment_text
-				comment.owner_user = myuser_key
+				comment.owner_user = logedin_use_key
 				comment_key = comment.put()
 				commented_post.comments.insert(0,comment_key)
 				commented_post.put()

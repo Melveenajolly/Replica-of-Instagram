@@ -37,6 +37,9 @@
 			{% for i in search_output %}
 			  
 			  <a href="/profile?user_key={{i.key.urlsafe()}}">{{i.email_address}}</a>
+			 
+
+			  <br/>
 			  <br/>
 			 {% endfor %}
 			 {% else %}

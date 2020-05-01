@@ -62,7 +62,10 @@
 			<img alt="image" id="img" src="/download?key={{i.key.urlsafe()}} "/>
 			{% endif %}
 			<br/>
+			{% if i.text_caption %}
+
 			<p>{{i.text_caption}}</p>
+			{% endif %}
 			{% for j in i.comments[:5] %}
 				<p>{{j.get().owner_user.get().username}}: <i>{{j.get().comment_text}}</i></p>
 				{% endfor %}
@@ -70,14 +73,18 @@
 
 				<a href="/view?post_key={{i.key.urlsafe()}}">More..</a>
 				{% endif %}
-			<form action="/profile?user_key ={{user_key}}" method="post">
+				<br/>
+			<form action="/profile?user_key={{current_user.key.urlsafe()}}" method="post">
 					<input type="hidden" name="postid" value="{{i.key.id()}}">
 					<input type="hidden" value="{{logedin_use_key}}" name="logedin_use_key"/>
 			      <input type="text" placeholder="Comment..." name="comment" maxlength="200" required>
 			      <button type="submit" name="button" value="Submit">Submit</button>
 			    </form>
+			    <hr noshade="noshade">
 			{% endfor %}
 		    </div>
+		    {%else%}
+		    <h3>No Posts</h3>
 			{% endif %}
 			
 			</div>
